@@ -8,10 +8,10 @@
   ],
   "dependencies": {
     "purescript-strings": "^3.3.0",
-    "purescript-record": "^0.2.0"
+    "purescript-record": "^0.2.0",
+    "purescript-typelevel-prelude": "kcsongor/purescript-typelevel-prelude#8603ec35feafedee9e5b285091573ecb555f0215"
   },
   "devDependencies": {
-    "purescript-psci-support": "^3.0.0",
-    "purescript-typelevel-prelude": "#phil/append-symbol"
+    "purescript-psci-support": "^3.0.0"
   }
 }
