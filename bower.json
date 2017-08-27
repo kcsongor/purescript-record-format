@@ -1,0 +1,17 @@
+{
+  "name": "purescript-record-format",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-strings": "^3.3.0",
+    "purescript-record": "^0.2.0"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^3.0.0",
+    "purescript-typelevel-prelude": "#phil/append-symbol"
+  }
+}
