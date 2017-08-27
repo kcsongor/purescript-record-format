@@ -3,7 +3,7 @@
 Experimental record formatting from type-level format strings, based on [Justin Woo](https://github.com/justinwoo)'s idea.
 
 This package uses a modified version of the compiler (and the typelevel-prelude
-package) that supports `Uncons (s :: Symbol) (h :: Symbol) (t :: Symbol) | s -> h t` - breaking a type-level string to its head and tail.
+package) that supports ` class ConsSymbol (head :: Symbol) (tail :: Symbol) (sym :: Symbol) | sym -> head tail, head tail -> sym ` - breaking a type-level string to its head and tail.
 
 It also relies on overlapping instances being chosen in alphabetical order.
 

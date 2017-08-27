@@ -2,7 +2,7 @@ module Data.Record.Format where
 
 import Prelude (id, (<>), class Show, show)
 import Type.Prelude (Proxy (..))
-import Type.Data.Symbol (class UnconsSymbol, class IsSymbol, SProxy (..), class AppendSymbol, reflectSymbol)
+import Type.Data.Symbol (class ConsSymbol, class IsSymbol, SProxy (..), reflectSymbol)
 import Data.Record (get)
 
 --------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ instance bFmtVar :: Show a => FormatVar a where
 class Parse (i :: Symbol) (o :: FList) | i -> o
 
 instance aParse :: Parse "" FNil
-instance bParse :: (UnconsSymbol i h t, ParseLit h t o) => Parse i o
+instance bParse :: (ConsSymbol h t i, ParseLit h t o) => Parse i o
 
 -- | Parse literals. @h@ is the current character, @t@ is the remaining string
 class ParseLit (h :: Symbol) (t :: Symbol) (o :: FList) | h t -> o
@@ -88,14 +88,14 @@ instance aParseLitNil :: ParseLit o "" (FCons (Lit o) FNil)
 
 -- when we find a '{' character, call @ParseVar@
 instance bParseLitVar ::
-  ( UnconsSymbol t h' t'
+  ( ConsSymbol h' t' t
   , ParseVar h' t' (Var match) rest
   , Parse rest pRest
   ) => ParseLit "{" t (FCons (Lit "") (FCons (Var match) pRest))
 
 instance cParseLit ::
   ( Parse i (FCons (Lit l) fs)
-  , AppendSymbol c l cl
+  , ConsSymbol c l cl
   ) => ParseLit c i (FCons (Lit cl) fs)
 
 -- | Parse variables. Returns the symbol between {}s and the remaining string
@@ -107,9 +107,9 @@ instance bParseVar :: ParseVar "}" i (Var "") i
 instance cParseVar :: ParseVar curr "" (Var curr) ""
 
 instance dParseVar ::
-  ( UnconsSymbol t h' t'
+  ( ConsSymbol h' t' t 
   , ParseVar h' t' (Var var) rest
-  , AppendSymbol h var var'
+  , ConsSymbol h var var'
   ) => ParseVar h t (Var var') rest
 
 parse :: forall i o. Parse i o => SProxy i -> FListProxy o
