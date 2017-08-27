@@ -1,11 +1,11 @@
 module Test.Main where
 
+import Data.Record.Format
+import Type.Data.Symbol
 import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
-  log "You should add some tests."
-
-asd = 5
+  log $ format (SProxy :: SProxy "Hi {name}! Your favourite number is {number}") {name : "Bill", number : 16}

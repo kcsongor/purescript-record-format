@@ -5,6 +5,8 @@ Experimental record formatting from type-level format strings, based on [Justin 
 This package uses a modified version of the compiler (and the typelevel-prelude
 package) that supports `Uncons (s :: Symbol) (h :: Symbol) (t :: Symbol) | s -> h t` - breaking a type-level string to its head and tail.
 
+It also relies on overlapping instances being chosen in alphabetical order.
+
 ## Example
 
 ```purescript
