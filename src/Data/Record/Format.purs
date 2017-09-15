@@ -45,7 +45,7 @@ instance formatVar ::
   ) => FormatParsed (FCons (Var key) ks) row where
   formatParsed _ row
     = var <> rest
-    where var  = fmtVar @typ (get (SProxy :: SProxy key) row)
+    where var  = fmtVar (get (SProxy :: SProxy key) row)
           rest = formatParsed @ks row
 
 instance formatLit ::
@@ -60,15 +60,12 @@ instance formatLit ::
 -- | Formatting variables - we don't want to show the quotes around strings, so
 --   we treat them specially
 class FormatVar a where
-  -- the @Proxy a@ seems redundant, but it's needed here, otherwise the
-  -- @formatVar@ instance above tries to always match the second instance (I'm
-  -- not sure why - this is just a workaround)
-  fmtVar :: @a -> a -> String
+  fmtVar :: a -> String
 
 instance aFmtVar :: FormatVar String where
-  fmtVar _ = id
+  fmtVar = id
 else instance bFmtVar :: Show a => FormatVar a where
-  fmtVar _ = show
+  fmtVar = show
 
 --------------------------------------------------------------------------------
 -- Parsing
