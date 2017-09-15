@@ -20,7 +20,7 @@ foreign import data FCons :: Fmt -> FList -> FList
 -- | Format a row with a (type-level) format string. If @row@ doesn't contain
 --   all the necessary fields, constraint resolution fails
 class Format (string :: Symbol) (row :: # Type) where
-  format :: SProxy string -> Record row -> String
+  format :: @string -> Record row -> String
 
 -- parse the format string and delegate the formatting to @FormatParsed@
 instance formatParsedFormat ::
@@ -45,7 +45,7 @@ instance formatVar ::
   ) => FormatParsed (FCons (Var key) ks) row where
   formatParsed _ row
     = var <> rest
-    where var  = fmtVar (Proxy :: Proxy typ) (get (SProxy :: SProxy key) row)
+    where var  = fmtVar @typ (get (SProxy :: SProxy key) row)
           rest = formatParsed @ks row
 
 instance formatLit ::
@@ -63,7 +63,7 @@ class FormatVar a where
   -- the @Proxy a@ seems redundant, but it's needed here, otherwise the
   -- @formatVar@ instance above tries to always match the second instance (I'm
   -- not sure why - this is just a workaround)
-  fmtVar :: Proxy a -> a -> String
+  fmtVar :: @a -> a -> String
 
 instance aFmtVar :: FormatVar String where
   fmtVar _ = id
@@ -106,5 +106,5 @@ else instance dParseVar ::
   , ConsSymbol h var var'
   ) => ParseVar h t (Var var') rest
 
-parse :: forall i o. Parse i o => SProxy i -> @o
+parse :: forall i o. Parse i o => @i -> @o
 parse _ = @o

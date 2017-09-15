@@ -7,7 +7,7 @@ This library uses the unreleased 0.12 version of the compiler.
 ## Example
 
 ```purescript
-format (SProxy :: SProxy "Hi {name}! Your favourite number is {number}") {name : "Bill", number : 16}
+format @"Hi {name}! Your favourite number is {number}" {name : "Bill", number : 16}
 ```
 
 produces the string
@@ -19,7 +19,7 @@ produces the string
 A missing field results in a type-error:
 
 ```purescript
-format (SProxy :: SProxy "Hi {name}! Your favourite number is {number}") {name : "Bill"}
+format @"Hi {name}! Your favourite number is {number}" {name : "Bill"}
 ```
 
 ```

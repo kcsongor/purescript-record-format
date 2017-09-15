@@ -8,4 +8,4 @@ import Control.Monad.Eff.Console (CONSOLE, log)
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
-  log $ format (SProxy :: SProxy "Hi {name}! Your favourite number is {number}") {name : "Bill", number : 16}
+  log $ format @"Hi {name}! Your favourite number is {number}" {name : "Bill", number : 16}
