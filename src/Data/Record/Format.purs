@@ -17,8 +17,6 @@ foreign import kind FList
 foreign import data FNil :: FList
 foreign import data FCons :: Fmt -> FList -> FList
 
-data FListProxy (l :: FList) = FListProxy
-
 -- | Format a row with a (type-level) format string. If @row@ doesn't contain
 --   all the necessary fields, constraint resolution fails
 class Format (string :: Symbol) (row :: # Type) where
@@ -29,12 +27,12 @@ instance formatParsedFormat ::
   ( Parse string parsed
   , FormatParsed parsed row
   ) => Format string row where
-  format _ = formatParsed (FListProxy :: FListProxy parsed)
+  format _ = formatParsed @parsed
 
 -- | Format a row with a list of format tokens. If @row@ doesn't contain
 --   all the necessary fields, constraint resolution fails
 class FormatParsed (strings :: FList) (row :: # Type) where
-  formatParsed :: FListProxy strings -> Record row -> String
+  formatParsed :: @strings -> Record row -> String
 
 instance formatFNil :: FormatParsed FNil row where
   formatParsed _ _ = ""
@@ -48,7 +46,7 @@ instance formatVar ::
   formatParsed _ row
     = var <> rest
     where var  = fmtVar (Proxy :: Proxy typ) (get (SProxy :: SProxy key) row)
-          rest = formatParsed (FListProxy :: FListProxy ks) row
+          rest = formatParsed @ks row
 
 instance formatLit ::
   ( IsSymbol l
@@ -57,7 +55,7 @@ instance formatLit ::
   formatParsed _ row
     = lit <> rest
     where lit  = reflectSymbol (SProxy :: SProxy l)
-          rest = formatParsed (FListProxy :: FListProxy ks) row
+          rest = formatParsed @ks row
 
 -- | Formatting variables - we don't want to show the quotes around strings, so
 --   we treat them specially
@@ -69,8 +67,7 @@ class FormatVar a where
 
 instance aFmtVar :: FormatVar String where
   fmtVar _ = id
-
-instance bFmtVar :: Show a => FormatVar a where
+else instance bFmtVar :: Show a => FormatVar a where
   fmtVar _ = show
 
 --------------------------------------------------------------------------------
@@ -79,21 +76,19 @@ instance bFmtVar :: Show a => FormatVar a where
 class Parse (i :: Symbol) (o :: FList) | i -> o
 
 instance aParse :: Parse "" FNil
-instance bParse :: (ConsSymbol h t i, ParseLit h t o) => Parse i o
+else instance bParse :: (ConsSymbol h t i, ParseLit h t o) => Parse i o
 
 -- | Parse literals. @h@ is the current character, @t@ is the remaining string
 class ParseLit (h :: Symbol) (t :: Symbol) (o :: FList) | h t -> o
 
 instance aParseLitNil :: ParseLit o "" (FCons (Lit o) FNil)
-
 -- when we find a '{' character, call @ParseVar@
-instance bParseLitVar ::
+else instance bParseLitVar ::
   ( ConsSymbol h' t' t
   , ParseVar h' t' (Var match) rest
   , Parse rest pRest
   ) => ParseLit "{" t (FCons (Lit "") (FCons (Var match) pRest))
-
-instance cParseLit ::
+else instance cParseLit ::
   ( Parse i (FCons (Lit l) fs)
   , ConsSymbol c l cl
   ) => ParseLit c i (FCons (Lit cl) fs)
@@ -103,14 +98,13 @@ instance cParseLit ::
 class ParseVar (h :: Symbol) (t :: Symbol) (var :: Fmt) (rest :: Symbol) | h t -> var rest
 
 instance aParseVar :: ParseVar "" a (Var "") ""
-instance bParseVar :: ParseVar "}" i (Var "") i
-instance cParseVar :: ParseVar curr "" (Var curr) ""
-
-instance dParseVar ::
+else instance bParseVar :: ParseVar "}" i (Var "") i
+else instance cParseVar :: ParseVar curr "" (Var curr) ""
+else instance dParseVar ::
   ( ConsSymbol h' t' t 
   , ParseVar h' t' (Var var) rest
   , ConsSymbol h var var'
   ) => ParseVar h t (Var var') rest
 
-parse :: forall i o. Parse i o => SProxy i -> FListProxy o
-parse _ = FListProxy
+parse :: forall i o. Parse i o => SProxy i -> @o
+parse _ = @o
