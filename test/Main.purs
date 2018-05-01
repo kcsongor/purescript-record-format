@@ -1,11 +1,13 @@
 module Test.Main where
 
-import Data.Record.Format
-import Type.Data.Symbol
 import Prelude
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
 
-main :: forall e. Eff (console :: CONSOLE | e) Unit
+import Data.Record.Format (format)
+import Effect (Effect)
+import Test.Assert (assert)
+import Type.Prelude (SProxy(..))
+
+main :: Effect Unit
 main = do
-  log $ format @"Hi {name}! Your favourite number is {number}" {name : "Bill", number : 16}
+  let formatted = format (SProxy :: SProxy "Hi {name}! You are {number}") {name : "Bill", number : 16}
+  assert $ formatted == "Hi Bill! You are 16"
