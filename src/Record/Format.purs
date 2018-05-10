@@ -1,10 +1,10 @@
-module Data.Record.Format where
+module Record.Format where
 
 import Prelude (identity, (<>), class Show, show)
-import Type.Data.Symbol (class IsSymbol, SProxy (..), reflectSymbol)
-import Data.Record (get)
-import Prim.Symbol as Symbol
 import Prim.Row as Row
+import Prim.Symbol as Symbol
+import Record as Record
+import Type.Data.Symbol (class IsSymbol, SProxy(..), reflectSymbol)
 
 --------------------------------------------------------------------------------
 -- * Format strings
@@ -48,7 +48,7 @@ instance formatVar ::
   ) => FormatParsed (FCons (Var key) ks) row where
   formatParsed _ row
     = var <> rest
-    where var  = fmtVar (get (SProxy :: SProxy key) row)
+    where var  = fmtVar (Record.get (SProxy :: SProxy key) row)
           rest = formatParsed (FProxy :: FProxy ks) row
 
 instance formatLit ::
