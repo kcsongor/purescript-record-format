@@ -2,8 +2,8 @@ module Test.Main where
 
 import Prelude
 
-import Data.Record.Format (format)
 import Effect (Effect)
+import Record.Format (format)
 import Test.Assert (assert)
 import Type.Prelude (SProxy(..))
 
