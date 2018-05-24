@@ -1,13 +1,15 @@
 # purescript-record-format
 
-Experimental record formatting from type-level format strings, based on [Justin Woo](https://github.com/justinwoo)'s idea.
+Record formatting from type-level format strings, based on [Justin Woo](https://github.com/justinwoo)'s idea.
 
 This library uses the 0.12 version of the compiler.
 
 ## Example
 
 ```purescript
-format (SProxy :: SProxy "Hi {name}! Your favourite number is {number}") {name : "Bill", number : 16}
+format
+  (SProxy :: SProxy "Hi {name}! Your favourite number is {number}")
+  {name : "Bill", number : 16}
 ```
 
 produces the string
@@ -19,7 +21,9 @@ produces the string
 A missing field results in a type-error:
 
 ```purescript
-format (SProxy "Hi {name}! Your favourite number is {number}") {name : "Bill"}
+format
+  (SProxy "Hi {name}! Your favourite number is {number}")
+  {name : "Bill"}
 ```
 
 ```
