@@ -6,6 +6,11 @@
     "bower_components",
     "output"
   ],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kcsongor/purescript-record-format.git"
+  },
   "dependencies": {
     "purescript-strings": "^4.0.0",
     "purescript-record": "^1.0.0",
