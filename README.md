@@ -2,7 +2,7 @@
 
 Experimental record formatting from type-level format strings, based on [Justin Woo](https://github.com/justinwoo)'s idea.
 
-This library uses the unreleased 0.12 version of the compiler.
+This library uses the 0.12 version of the compiler.
 
 ## Example
 
