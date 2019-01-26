@@ -12,9 +12,9 @@
     "url": "git://github.com/kcsongor/purescript-record-format.git"
   },
   "dependencies": {
-    "purescript-strings": "^4.0.0",
-    "purescript-record": "^1.0.0",
-    "purescript-typelevel-prelude": "^3.0.0"
+    "purescript-strings": "^4.0.1",
+    "purescript-record": "^2.0.0",
+    "purescript-typelevel-prelude": "^4.0.0"
   },
   "devDependencies": {
     "purescript-assert": "^4.0.0",
