@@ -9,12 +9,12 @@ import Type.Data.Symbol (class IsSymbol, SProxy(..), reflectSymbol)
 --------------------------------------------------------------------------------
 -- * Format strings
 
-foreign import kind Fmt -- ^ a format token is...
+data Fmt -- ^ a format token is...
 foreign import data Var :: Symbol -> Fmt -- ^ either a variable (to be replaced)
 foreign import data Lit :: Symbol -> Fmt -- ^ or a literal
 
 -- | A list of format tokens
-foreign import kind FList
+data FList
 foreign import data FNil :: FList
 foreign import data FCons :: Fmt -> FList -> FList
 
@@ -22,7 +22,7 @@ data FProxy (fl :: FList) = FProxy
 
 -- | Format a row with a (type-level) format string. If @row@ doesn't contain
 --   all the necessary fields, constraint resolution fails
-class Format (string :: Symbol) (row :: # Type) where
+class Format (string :: Symbol) (row :: Row Type) where
   format :: SProxy string -> Record row -> String
 
 -- parse the format string and delegate the formatting to @FormatParsed@
@@ -34,7 +34,7 @@ instance formatParsedFormat ::
 
 -- | Format a row with a list of format tokens. If @row@ doesn't contain
 --   all the necessary fields, constraint resolution fails
-class FormatParsed (strings :: FList) (row :: # Type) where
+class FormatParsed (strings :: FList) (row :: Row Type) where
   formatParsed :: FProxy strings -> Record row -> String
 
 instance formatFNil :: FormatParsed FNil row where
